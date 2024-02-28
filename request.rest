@@ -1,0 +1,28 @@
+GET http://127.0.0.1:5001/edge-2060b/us-central1/saveAttendance
+Content-Type: application/json
+
+[
+  {
+    "participantId": "participantId1",
+    "attendanceStatus": "present"
+  },
+  {
+    "participantId": "participantId2",
+    "attendanceStatus": "absent"
+  },
+  {
+    "participantId": "participantId3",
+    "attendanceStatus": "present"
+  }
+]
+############
+GET http://127.0.0.1:5001/edge-2060b/us-central1/getAllStudentsfromClass
+Content-Type: application/json
+
+{
+    "Type":"student",
+    "Class":"8",
+    "Section":"A",
+    "School":"aps"
+}
+
