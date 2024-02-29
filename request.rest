@@ -24,5 +24,16 @@ Content-Type: application/json
     "Class":"8",
     "Section":"A",
     "School":"aps"
-}
 
+}
+##########################################
+GET http://127.0.0.1:5001/edge-2060b/us-central1/saveMarks
+Content-Type: application/json
+
+[
+{
+  "uid":"1",
+  "subject":"science",
+  "marks":"70"  
+}
+]
