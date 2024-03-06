@@ -20,7 +20,7 @@ exports.saveAttendance = async (req, res) => {
 
     await batch.commit();
 
-    return res.status(200).send('Attendance saved successfully.');
+    return res.status(200).send('Attendance Saved');
   } catch (error) {
     console.error('Error saving attendance:', error);
     return res.status(500).send('Internal server error.');

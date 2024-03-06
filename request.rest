@@ -37,3 +37,13 @@ Content-Type: application/json
   "marks":"70"  
 }
 ]
+########################################
+POST https://us-central1-edge-2060b.cloudfunctions.net/getAllStudentsfromClass
+Content-Type: application/json
+
+{
+    "Type":"student",
+    "Class":"8",
+    "Section":"A",
+    "School":"aps"
+}
