@@ -1,9 +1,10 @@
 const functions = require("firebase-functions");
 const {initializeApp} = require("firebase-admin/app");
 
-const {saveAttendance} = require("./api/attendance");
-const {getAllStudentsfromClass} = require("./api/teacher");
-const {saveMarks} = require("./api/savemarks");
+const { saveAttendance } = require('./api/attendance');
+const { getAllStudentsfromClass } = require("./api/teacher");
+const { saveMarks } = require("./api/savemarks");
+const { getClass } = require("./api/getclass");
 
 exports.saveAttendance = functions.https.onRequest(async (req, res) => {
   saveAttendance(req, res);
@@ -16,5 +17,8 @@ exports.getAllStudentsfromClass = functions.https.onRequest(async (req, res) => 
     getAllStudentsfromClass(req, res);
 });
 
+exports.getClass = onRequest(async (req, res) => {
+    getClass(req, res);
+})
 initializeApp();
 
