@@ -12,7 +12,10 @@ exports.getAllTests = async (req, res) => {
         }
 
         const testsRef = admin.firestore().collection('tests');
-        const querySnapshot = await testsRef.get();
+        const querySnapshot = await testsRef.
+        where('teacherId','==',teacherId)
+        .where('classId','==',classId)
+        .get();
 
         const tests = [];
         querySnapshot.forEach(doc => {
@@ -31,7 +34,7 @@ exports.createNewTest = async (req, res) => {
     try {
         const { teacherId, classID, testName, subject, date } = req.body;
 
-        if (!testName || !subject || !date) {
+        if (!testName || !subject || !date || !teacherId || !classID) {
             return res.status(400).send('Bad Request: testName and questions are required.');
         }
 
@@ -43,8 +46,7 @@ exports.createNewTest = async (req, res) => {
             subject,
             date,
         });
-
-        return res.status(201).json({ id: newTestRef.id, testName, questions });
+        return res.status(201).json('test created successfully');
     } catch (error) {
         console.error('Error creating a new test:', error);
         return res.status(500).send('Internal server error.');

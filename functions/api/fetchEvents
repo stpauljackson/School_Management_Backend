@@ -1,14 +1,16 @@
-const functions = require('firebase-admin');
+const admin = require('firebase-admin');
 
-exports.getEvents = async (req, res) => {
+exports.fetchEvents = async (req, res) => {
     try {
         const { school } = req.body;
         if (!school) {
-            return res.status(400).send('Bad Request: teacherId and classId are required.');
+            return res.status(400).send('Bad Request: school required.');
         }
 
-        const eventsRef = admin.firestore().collection('events'); // Assuming 'admin' is already initialized in your index.js
-        const querySnapshot = await eventsRef.get();
+        const eventsRef = admin.firestore().collection('events');
+        const querySnapshot = await eventsRef
+        .where('school', '==', school)
+        .get();
 
         const events = [];
         querySnapshot.forEach(doc => {
@@ -17,7 +19,7 @@ exports.getEvents = async (req, res) => {
 
         return res.status(200).json(events);
     } catch (error) {
-        console.error('Error fetching events:', error);
+        console.error('Error in fetching events:', error);
         return res.status(500).send('Internal server error.');
     }
 };

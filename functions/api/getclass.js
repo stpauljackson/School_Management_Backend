@@ -12,7 +12,7 @@ exports.getClass = async (req, res) => {
         querySnapshot.forEach(doc => {
             const Class = doc.data();
             const docID = doc.id;
-            classes.push({ ...Class, docID });
+            classes.push({ ...Class, id:docID });
         });
 
         return res.status(200).json(classes);
