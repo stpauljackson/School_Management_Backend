@@ -17,7 +17,7 @@ exports.getAllStudentsfromClass = functions.https.onRequest(async (req, res) => 
     getAllStudentsfromClass(req, res);
 });
 
-exports.getClass = onRequest(async (req, res) => {
+exports.getClass = functions.https.onRequest(async (req, res) => {
     getClass(req, res);
 })
 initializeApp();
