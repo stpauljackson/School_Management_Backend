@@ -6,6 +6,7 @@ const { getAllStudentsfromClass } = require("./api/teacher");
 const { saveMarks } = require("./api/savemarks");
 const { getClass } = require("./api/getclass");
 const { getAllTests, createNewTest } = require("./api/getAllTests");
+const { fetchEvents } = require("./api/fetchEvents");
 
 exports.saveAttendance = functions.https.onRequest(async (req, res) => {
     saveAttendance(req, res);
@@ -29,6 +30,10 @@ exports.getAllTests = functions.https.onRequest(async (req, res) => {
 
 exports.createNewTest = functions.https.onRequest(async (req, res) => {
     await createNewTest(req, res); 
+});
+
+exports.fetchEvents = functions.https.onRequest(async(req,res) => {
+    await fetchEvents(req, res);
 });
 
 initializeApp();

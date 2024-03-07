@@ -58,20 +58,13 @@ Content-Type: application/json
             "classCode":"A"
 }
 ]
-########################################
-POST https://us-central1-edge-2060b.cloudfunctions.net/getAllStudentsfromClass
+
+###############
+GET http://127.0.0.1:5001/edge-2060b/us-central1/getAllTests
 Content-Type: application/json
 
 {
-    "Type":"student",
-    "Class":"8",
-    "Section":"A",
-    "School":"aps"
+            "teacherId":"11690DBPBC1MVp3y9Ez04Exony4V2",
+            "classId":"E1wuTQmnaMp8oW0bvIPB"
 }
-############################
-POST http://127.0.0.1:5001/edge-2060b/us-central1/getClass
-Content-Type: application/json
 
-{
-    "uid":"1690DBPBC1MVp3y9Ez04Exony4V2"
-}
