@@ -6,10 +6,9 @@ module.exports = {
   parserOptions: {
     "ecmaVersion": 2018,
   },
-  extends: [
-    "eslint:recommended",
-    "google",
-  ],
+  "extends": "google",
+      // "eslint:recommended",
+
   rules: {
     "no-restricted-globals": ["error", "name", "length"],
     "prefer-arrow-callback": "error",

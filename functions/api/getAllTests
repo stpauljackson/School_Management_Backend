@@ -4,6 +4,13 @@ const admin = require('firebase-admin');
 // Fetch all tests
 exports.getAllTests = async (req, res) => {
     try {
+
+        const { teacherId, classId } = req.body;
+
+        if (!teacherId || !classId) {
+            return res.status(400).send('Bad Request: teacherId and classId are required.');
+        }
+
         const testsRef = admin.firestore().collection('tests');
         const querySnapshot = await testsRef.get();
 
@@ -22,16 +29,19 @@ exports.getAllTests = async (req, res) => {
 // Create a new test
 exports.createNewTest = async (req, res) => {
     try {
-        const { testName, questions } = req.body;
+        const { teacherId, classID, testName, subject, date } = req.body;
 
-        if (!testName || !questions) {
+        if (!testName || !subject || !date) {
             return res.status(400).send('Bad Request: testName and questions are required.');
         }
 
         const testsRef = admin.firestore().collection('tests');
         const newTestRef = await testsRef.add({
+            teacherId,
+            classID,
             testName,
-            questions,
+            subject,
+            date,
         });
 
         return res.status(201).json({ id: newTestRef.id, testName, questions });
