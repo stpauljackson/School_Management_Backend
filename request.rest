@@ -26,7 +26,7 @@ Content-Type: application/json
     "School":"aps"
 
 }
-##########################################
+###############################################
 GET http://127.0.0.1:5001/edge-2060b/us-central1/saveMarks
 Content-Type: application/json
 
@@ -35,5 +35,26 @@ Content-Type: application/json
   "uid":"1",
   "subject":"science",
   "marks":"70"  
+}
+]
+
+############################################
+
+GET http://127.0.0.1:5001/edge-2060b/us-central1/getClass
+Content-Type: application/json
+
+  {
+    "uid":"1690DBPBC1MVp3y9Ez04Exony4V2",
+  }
+
+#################################
+GET http://127.0.0.1:5001/edge-2060b/us-central1/marksofclass
+Content-Type: application/json
+
+[
+{
+            "uid":"11690DBPBC1MVp3y9Ez04Exony4V2",
+            "className":"8",
+            "classCode":"A"
 }
 ]

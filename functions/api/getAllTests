@@ -1,0 +1,42 @@
+
+const admin = require('firebase-admin');
+
+// Fetch all tests
+exports.getAllTests = async (req, res) => {
+    try {
+        const testsRef = admin.firestore().collection('tests');
+        const querySnapshot = await testsRef.get();
+
+        const tests = [];
+        querySnapshot.forEach(doc => {
+            tests.push(doc.data());
+        });
+
+        return res.status(200).json(tests);
+    } catch (error) {
+        console.error('Error fetching tests:', error);
+        return res.status(500).send('Internal server error.');
+    }
+};
+
+// Create a new test
+exports.createNewTest = async (req, res) => {
+    try {
+        const { testName, questions } = req.body;
+
+        if (!testName || !questions) {
+            return res.status(400).send('Bad Request: testName and questions are required.');
+        }
+
+        const testsRef = admin.firestore().collection('tests');
+        const newTestRef = await testsRef.add({
+            testName,
+            questions,
+        });
+
+        return res.status(201).json({ id: newTestRef.id, testName, questions });
+    } catch (error) {
+        console.error('Error creating a new test:', error);
+        return res.status(500).send('Internal server error.');
+    }
+};

@@ -9,10 +9,10 @@ exports.saveAttendance = async (req, res) => {
 
     const batch = admin.firestore().batch();
     
-    attendanceData.forEach(({ participantId, attendanceStatus }) => {
+    attendanceData.forEach(({ uid, attendanceStatus }) => {
       const attendanceRef = admin.firestore().collection('Attendances').doc();
       batch.set(attendanceRef, {
-        participantId,
+        uid,
         attendanceStatus,
         date: currentDate
       });
