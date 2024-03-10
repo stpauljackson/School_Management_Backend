@@ -3,15 +3,15 @@ Content-Type: application/json
 
 [
   {
-    "participantId": "participantId1",
+    "uid": "participantId1",
     "attendanceStatus": "present"
   },
   {
-    "participantId": "participantId2",
+    "uid": "participantId2",
     "attendanceStatus": "absent"
   },
   {
-    "participantId": "participantId3",
+    "uid": "participantId3",
     "attendanceStatus": "present"
   }
 ]
@@ -87,4 +87,13 @@ Content-Type: application/json
 
 {
   "school": "aps"
+}
+
+############
+POST http://127.0.0.1:5001/edge-2060b/us-central1/deleteRecordsByDate
+Content-Type: application/json
+
+{
+    "date": "2024-03-10"
+
 }

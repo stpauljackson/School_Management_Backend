@@ -7,6 +7,7 @@ const { saveMarks } = require("./api/savemarks");
 const { getClass } = require("./api/getclass");
 const { getAllTests, createNewTest } = require("./api/getAllTests");
 const { fetchEvents } = require("./api/fetchEvents");
+const { deleteRecordsByDate } = require("./api/delete_records");
 
 exports.saveAttendance = functions.https.onRequest(async (req, res) => {
     saveAttendance(req, res);
@@ -35,6 +36,10 @@ exports.createNewTest = functions.https.onRequest(async (req, res) => {
 exports.fetchEvents = functions.https.onRequest(async(req,res) => {
     await fetchEvents(req, res);
 });
+
+exports.deleteRecordsByDate = functions.https.onRequest(async(req,res) => {
+    await deleteRecordsByDate(req, res);
+})
 
 initializeApp();
 
