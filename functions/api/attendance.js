@@ -3,18 +3,18 @@ const admin = require('firebase-admin');
 exports.saveAttendance = async (req, res) => {
     
   try {
-    const attendanceData = req.body;
-  
+    const {attendanceData,teacherID} = req.body;
     const currentDate = new Date().toISOString().split('T')[0];
 
     const batch = admin.firestore().batch();
     
-    attendanceData.forEach(({ uid, attendanceStatus }) => {
+    attendanceData.forEach(({ participantId, attendanceStatus }) => {
       const attendanceRef = admin.firestore().collection('Attendances').doc();
       batch.set(attendanceRef, {
-        uid,
+        participantId,
         attendanceStatus,
-        date: currentDate
+        date: currentDate,
+        teacherID
       });
     });
 

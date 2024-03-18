@@ -1,3 +1,13 @@
+POST https://us-central1-edge-2060b.cloudfunctions.net/getCalender
+Content-Type: application/json
+
+{
+    "School":"aps"
+}
+################################
+POST http://127.0.0.1:5001/edge-2060b/us-central1/uploadFile
+
+################################################################
 GET http://127.0.0.1:5001/edge-2060b/us-central1/saveAttendance
 Content-Type: application/json
 
@@ -15,7 +25,7 @@ Content-Type: application/json
     "attendanceStatus": "present"
   }
 ]
-############
+#################
 GET http://127.0.0.1:5001/edge-2060b/us-central1/getAllStudentsfromClass
 Content-Type: application/json
 
@@ -23,8 +33,9 @@ Content-Type: application/json
     "Type":"student",
     "Class":"8",
     "Section":"A",
-    "School":"aps"
-
+    "School":"aps",
+    "purpose":"attendance",
+    "teacherID": "1690DBPBC1MVp3y9Ez04Exony4V2"
 }
 ###############################################
 GET http://127.0.0.1:5001/edge-2060b/us-central1/saveMarks
@@ -88,3 +99,15 @@ Content-Type: application/json
 {
   "school": "aps"
 }
+
+################################
+POST https://us-central1-edge-2060b.cloudfunctions.net/createNewTest
+Content-Type: application/json
+
+{
+        "classId": "classId",
+        "teacherId": "user",
+        "testName": "testName",
+        "subject": "subject",
+        "date": "date"
+};

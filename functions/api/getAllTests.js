@@ -32,16 +32,16 @@ exports.getAllTests = async (req, res) => {
 // Create a new test
 exports.createNewTest = async (req, res) => {
     try {
-        const { teacherId, classID, testName, subject, date } = req.body;
+        const { teacherId, classId, testName, subject, date } = req.body;
 
-        if (!testName || !subject || !date || !teacherId || !classID) {
+        if (!testName || !subject || !date || !teacherId || !classId) {
             return res.status(400).send('Bad Request: testName and questions are required.');
         }
 
         const testsRef = admin.firestore().collection('tests');
         const newTestRef = await testsRef.add({
             teacherId,
-            classID,
+            classId,
             testName,
             subject,
             date,
