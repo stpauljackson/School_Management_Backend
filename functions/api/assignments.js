@@ -1,60 +1,61 @@
-const os = require('os');
-const path = require('path');
-const fs = require('fs');
-const { v4: uuidv4 } = require('uuid');
-const multer = require('multer');
+const firebase = require("firebase-admin")
 
-// Set up multer storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, os.tmpdir()); // Save files to OS's temporary directory
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + '-' + file.originalname); // Append unique suffix to file name
-  }
-});
 
-const upload = multer({ storage: storage }).single('file');
+const formidable = require("formidable-serverless");
+// const uuid = require("uuid-v4");
 
-exports.uploadFile = (req, res) => {
-  upload(req, res, async (err) => { 
-    try {
-      if (err instanceof multer.MulterError) {
-        console.error('Multer error:', err);
-        return res.status(400).send('Multer error: ' + err.message);
-      } else if (err) {
-        console.error('Other error:', err);
-        return res.status(500).send('Error: ' + err.message);
+const { Storage } = require("@google-cloud/storage");
+
+exports.uploadFile = async (req, res) => {
+  var form = new formidable.IncomingForm();
+  return new Promise((resolve, reject) => {
+    form.parse(req, async (err, fields, files) => {
+      var file = files.file;
+      if (!file) {
+        reject(new Error("no file to upload, please choose a file."));
+        return;
       }
+      var filePath = file.path;
+      console.log("File path: " + filePath);
 
-      if (!req.file) {
-        console.log('No file selected');
-        return res.status(400).send('No file selected');
-      }
+      // let //uuid = UUID();
 
-      const tempFilePath = req.file.path;
-      const originalFileName = req.file.originalname;
+      // const storage = new Storage({
+      //   keyFilename: "service-account.json",
+      // });
 
-      const uniqueFileName = uuidv4() + path.extname(originalFileName);
-      const newFilePath = path.join(os.tmpdir(), uniqueFileName);
 
-      fs.renameSync(tempFilePath, newFilePath);
-
-      const bucket = admin.storage().bucket();
-      await bucket.upload(newFilePath, {
-        destination: `uploads/${uniqueFileName}`,
-        metadata: {
-          contentType: req.file.mimetype,
-        },
+      const response = await firebase.storage().bucket("default_bucket").upload(filePath, {
+        contentType: file.type,
+        // metadata: {
+        //   metadata: {
+        //     firebaseStorageDownloadTokens: uuid,
+        //   },
+        // },
       });
 
-      fs.unlinkSync(newFilePath);
+      // const fullMediaLink = response[0].metadata.mediaLink + "";
+      // const mediaLinkPath = fullMediaLink.substring(
+      //   0,
+      //   fullMediaLink.lastIndexOf("/") + 1
+      // );
+      // const downloadUrl =
+      //   mediaLinkPath +
+      //   encodeURIComponent(response[0].name) +
+      //   "?alt=media&token=" +
+      //   uuid;
 
-      return res.status(200).send('File uploaded successfully');
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      return res.status(500).send('Error uploading file');
-    }
-  });
-};
+      // console.log("downloadUrl", downloadUrl);
+
+      resolve({ fileInfo: response[0].metadata /*, downloadUrl*/ });
+    });
+  })
+    .then((response) => {
+      res.status(200).json({ response });
+      return null;
+    })
+    .catch((err) => {
+      console.error("Error while parsing form: " + err);
+      res.status(500).json({ error: err });
+    });
+}
