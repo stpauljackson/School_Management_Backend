@@ -1,6 +1,5 @@
 const firebase = require("firebase-admin")
 const formidable = require("formidable-serverless");
-const { Storage } = require("@google-cloud/storage");
 const admin = require("firebase-admin");
 
 exports.uploadFile = (req, res) => {

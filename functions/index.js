@@ -10,6 +10,7 @@ const { fetchEvents } = require("./api/fetchEvents");
 const { deleteRecordsByDate } = require("./api/delete_records");
 const { uploadFile, getAssignments } = require("./api/assignments.js");
 const {sendNotification} = require("./api/notification.js");
+const {createUserIdsWithExcelFile} = require("./api/admin.js");
 
 exports.saveAttendance = functions.https.onRequest(saveAttendance);
 exports.saveMarks = functions.https.onRequest(saveMarks);
@@ -24,6 +25,7 @@ exports.getCalendar = functions.https.onRequest(getCalendar);
 exports.uploadFile = functions.https.onRequest(uploadFile);
 exports.deleteRecordsByDate = functions.https.onRequest(deleteRecordsByDate);
 exports.getAssignments = functions.https.onRequest(getAssignments);
+exports.createUserIdsWithExcelFile = functions.https.onRequest(createUserIdsWithExcelFile);
 exports.sendNotification = functions.https.onRequest((req, res) => {
 	const title = "Notification Title";
 	const body = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
