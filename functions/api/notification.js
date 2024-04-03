@@ -1,6 +1,14 @@
 const admin = require("firebase-admin");
 
-exports.sendNotification = (title, body, deviceTokens) => {
+/**
+ * Sends a notification to multiple device tokens.
+ *
+ * @param {string} title - The title of the notification.
+ * @param {string} body - The body of the notification.
+ * @param {Array<string>} deviceTokens - An array of device tokens to send the notification to.
+ * @return {Promise<Array<Object>>} A promise that resolves to an array of response objects.
+ */
+exports.sendNotification = async (title, body, deviceTokens) => {
     const messages = deviceTokens.map(deviceToken => {
         return {
             notification: {
