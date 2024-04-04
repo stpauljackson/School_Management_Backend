@@ -29,7 +29,7 @@ const XLSX = require('xlsx');
 //     }
 // };
 exports.createClasses = async (req, res) => {
-    let { no_of_classes, no_of_sections } = req.body;
+    let { no_of_classes, no_of_sections, schoolId } = req.body;
     no_of_classes = Number(no_of_classes);
     no_of_sections = Number(no_of_sections);
 
@@ -38,7 +38,7 @@ exports.createClasses = async (req, res) => {
         const sections = Array.from({ length: no_of_sections }, (v, k) => String.fromCharCode(k + 65));
         for (let i = 1; i <= no_of_classes; i++) {
             for (let j = 0; j < sections.length; j++) {
-                array.push({ class: i, section: sections[j] });
+                array.push({ class: i, section: sections[j], schoolId });
             }
         }
         res.status(200).json(array);
@@ -104,7 +104,11 @@ exports.createUserIdsWithExcelFile = async (req, res) => {
     }
 
     const filePath = file.path;
-    const excelData = await readExcelFileAndReturnJson(filePath,["email", "firstName", "lastName", "gender"]);
+    const col = ["email", "firstName", "lastName", "gender", "phoneNumber", "address", "dateOfBirth", "fatherName", 
+    "fatherOccupation","fatherNationalId","fatherMobileNumber","fatherIncome", "fatherEducation", "motherName", 
+    "motherOccupation", "motherNationalID", "motherEducation","motherIncome", "motherMobileNumber", "studentGovtIdNo.", "orphan", "religion", "identificationMark", 
+    "Previous School", "previouisSchool", "bloodGroup", "boardRollNo", "totalSiblings"]
+    const excelData = await readExcelFileAndReturnJson(filePath,col);
     excelData.forEach(user => {
       user.type = type;
       user.schoolId = schoolId;
