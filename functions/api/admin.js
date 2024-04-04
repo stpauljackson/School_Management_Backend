@@ -55,6 +55,48 @@ exports.createClasses = async (req, res) => {
     }
 };
 
+exports.getStudentFromClass = async (req, res) => {
+    const { classId } = req.body;
+    try {
+        const usersRef = admin.firestore().collection("users");
+        const query = usersRef.where("classId", "==", classId);
+        const querySnapshot = await query.get();
+        const users = [];
+
+        querySnapshot.forEach(doc => {
+            const userData = doc.data();
+            users.push({ ...userData, id: doc.id });
+        });
+        
+        res.status(200).json(users);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        return res.status(500).json({ error: error.code });
+    }
+}
+
+exports.getClasses = async (req, res) => {
+    const { schoolId } = req.body;
+
+    try {
+        const classesRef = admin.firestore().collection('classes');
+        const query = classesRef.where('schoolId', '==', schoolId);
+        const querySnapshot = await query.get();
+        const classes = [];
+
+        querySnapshot.forEach(doc => {
+            const classData = doc.data();
+            classes.push({ ...classData, id: doc.id });
+        });
+
+        res.status(200).json(classes);
+
+    } catch (error) {
+        console.error('Error fetching classes:', error);
+        return res.status(500).json({ error: error.code });
+    }
+};
+
 
 const createUsersWithId = async (users) => {
     try {
