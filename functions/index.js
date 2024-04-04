@@ -11,6 +11,7 @@ const { deleteRecordsByDate } = require("./api/delete_records");
 const { uploadFile, getAssignments } = require("./api/assignments.js");
 const {sendNotification} = require("./api/notification.js");
 const {createUserIdsWithExcelFile,createClasses} = require("./api/admin.js");
+const {createAnnouncements} = require("./api/createAnnouncements.js");
 
 exports.saveAttendance = functions.https.onRequest(saveAttendance);
 exports.saveMarks = functions.https.onRequest(saveMarks);
@@ -25,4 +26,5 @@ exports.deleteRecordsByDate = functions.https.onRequest(deleteRecordsByDate);
 exports.getAssignments = functions.https.onRequest(getAssignments);
 exports.createUserIdsWithExcelFile = functions.https.onRequest(createUserIdsWithExcelFile);
 exports.createClasses = functions.https.onRequest(createClasses);
+exports.createAnnouncements = functions.https.onRequest(createAnnouncements); 
 initializeApp();

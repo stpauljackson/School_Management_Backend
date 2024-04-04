@@ -28,6 +28,7 @@ const XLSX = require('xlsx');
 //         return Promise.reject(error);
 //     }
 // };
+
 exports.createClasses = async (req, res) => {
     let { no_of_classes, no_of_sections, schoolId } = req.body;
     no_of_classes = Number(no_of_classes);
@@ -36,11 +37,18 @@ exports.createClasses = async (req, res) => {
     try {
         const array = [];
         const sections = Array.from({ length: no_of_sections }, (v, k) => String.fromCharCode(k + 65));
+        const classesRef = admin.firestore().collection('classes');
+        const batch = admin.firestore().batch();
         for (let i = 1; i <= no_of_classes; i++) {
             for (let j = 0; j < sections.length; j++) {
-                array.push({ class: i, section: sections[j], schoolId });
+                const classData = { class: i, section: sections[j], schoolId };
+                array.push(classData);
+                const classDocRef = classesRef.doc();
+                batch.set(classDocRef, classData);
             }
         }
+        await batch.commit();
+
         res.status(200).json(array);
     } catch (error) {
         console.error('Error creating classes:', error);
