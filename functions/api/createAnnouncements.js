@@ -1,36 +1,23 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
-exports.createAnnouncement = functions.firestore
-  .document('announcement_staging/{documentId}')
-  .onCreate(async (snap, context) => {
-    const newValue = snap.data();
+exports.createAnnouncements = async (req, res) => {
+  const { message, school, title } = req.body;
+  const currentDate = new Date().toISOString();
 
-    if (!newValue.title || !newValue.body || !newValue.schoolId) {
-      throw new functions.https.HttpsError(
-        'invalid-argument',
-        'Title, body and schoolId are required.'
-      );
-    }
+  const announcement = {
+    message,
+    school,
+    title,
+    currentDate,
+  };
 
-    const currentDate = new Date().toISOString();
-
-    const batch = admin.firestore().batch();
-    const announcementsRef = admin.firestore().collection('events');
-    const announcementDocRef = announcementsRef.doc();
-
-    batch.set(announcementDocRef, {
-      title: newValue.title,
-      body: newValue.body,
-      schoolId: newValue.schoolId,
-      date: currentDate,
-      createdAt: admin.firestore.FieldValue.serverTimestamp()
+  const db = admin.firestore();
+  db.collection('events').add(announcement)
+    .then(() => res.send('Announcement created successfully'))
+    .catch((error) => {
+      console.error('Error creating announcement:', error);
+      res.status(500).send('Internal server error');
     });
-
-    batch.delete(snap.ref);
-
-    await batch.commit();
-
-    return { message: 'Announcement created successfully.' };
-  });
+};
 
