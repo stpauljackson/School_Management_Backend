@@ -1,5 +1,6 @@
 const admin = require('firebase-admin');
 
+// to fetch the list of classes with 
 exports.getClass = async (req, res) => {
     try {
         const { uid } = req.body;

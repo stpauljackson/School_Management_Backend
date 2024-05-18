@@ -2,15 +2,15 @@
 const functions = require("firebase-functions");
 const { initializeApp } = require("firebase-admin/app");
 
-const { saveAttendance } = require("./api/attendance");
-const { getAllStudentsfromClass, getCalendar } = require("./api/teacher");
-const { saveMarks } = require("./api/savemarks");
-const { getClass } = require("./api/getclass");
-const { getAllTests, createNewTest } = require("./api/getAllTests");
-const { fetchEvents } = require("./api/fetchEvents");
-const { uploadFile, getAssignments } = require("./api/assignments.js");
-const {createUserIdsWithExcelFile,createClasses,getClasses,getUsersByClassOrSchool,createUsersWithId, getDashboard} = require("./api/admin.js");
-const {createAnnouncements} = require("./api/createAnnouncements.js");
+const { saveAttendance } = require("./api/teacher/attendance.js");
+const { getAllStudentsfromClass, getCalendar } = require("./api/common/teacher.js");
+const { saveMarks } = require("./api/teacher/savemarks.js");
+const { getClass } = require("./api/common/getclass.js");
+const { getAllTests, createNewTest } = require("./api/teacher/getAllTests.js");
+const { fetchEvents } = require("./api/common/fetchEvents.js");
+const { uploadFile, getAssignments } = require("./api/common/assignments.js");
+const {createUserIdsWithExcelFile,createClasses,getClasses,getUsersByClassOrSchool,createUsersWithId, getDashboard} = require("./api/admin/admin.js");
+const {createAnnouncements} = require("./api/admin/createAnnouncements.js");
 
 exports.saveAttendance = functions.https.onRequest(saveAttendance);
 exports.saveMarks = functions.https.onRequest(saveMarks);
