@@ -2,32 +2,16 @@ const formidable = require("formidable-serverless");
 const admin = require("firebase-admin");
 const XLSX = require('xlsx');
 
-// exports.createClasses = async (req, res) => {
-//     let { no_of_classes, no_of_sections } = req.body;
-//     no_of_classes = Number(no_of_classes);
-//     no_of_sections = Number(no_of_sections);
+exports.getDashboard = async (req, res) => {
+    const schoolRef = admin.firestore().collection('schools').doc(req.body.schoolId);
+    const schoolDoc = await schoolRef.get();
+    if (!schoolDoc.exists) {
+        return res.status(400).json({ error: 'School does not exist' });
+    }
+    const schoolData = schoolDoc.data();
+    return res.status(200).json(schoolData);
 
-//     try {
-//         //const classesRef = admin.firestore().collection('classes');
-//         //const batch = admin.firestore().batch();
-//         const array = []
-//         const sections = Array.from({ length: no_of_sections }, (v, k) => String.fromCharCode(k + 65));
-//         for (let i = 1; i <= no_of_classes; i++) {
-//            for (let j = 0; j < sections.length; j++)
-//            {
-//             array.push({class:i, section:sections[j]})
-//            }
-//             // const classDocRef = classesRef.doc();
-            
-//             //batch.set(classDocRef, { id: i, sections });
-//         }
-//         //await batch.commit();
-//         res.status(200).json(array);
-//     } catch (error) {
-//         console.error('Error creating classes:', error);
-//         return Promise.reject(error);
-//     }
-// };
+};
 
 exports.createClasses = async (req, res) => {
     let { no_of_classes, no_of_sections, schoolId } = req.body;
@@ -55,12 +39,17 @@ exports.createClasses = async (req, res) => {
     }
 };
 
-exports.getStudentFromClass = async (req, res) => {
-    const { classId } = req.body;
+exports.getUsersByClassOrSchool = async (req, res) => {
+    const { classId, schoolId,type } = req.body;
     try {
-        const usersRef = admin.firestore().collection("users");
-        const query = usersRef.where("classId", "==", classId);
-        const querySnapshot = await query.get();
+        let queryBuilder;
+        if (type === 'student') {
+            queryBuilder = admin.firestore().collection('users').where('classId', '==', classId);
+        } else {
+            queryBuilder = admin.firestore().collection('users').where('schoolId', '==', schoolId).where('type', '==', type);
+        }
+
+        const querySnapshot = await queryBuilder.get();
         const users = [];
 
         querySnapshot.forEach(doc => {
@@ -107,10 +96,10 @@ const createUsersWithId = async (users) => {
         const password = "Password" // TODO find better approach 
 
         const createUserPromises = users.map(async (user) => {
-            const { email, firstName, lastName, gender } = user;
+            const { email, firstName, ...info } = user;
             return auth.createUser({ email, displayName: firstName, password })
                 .then(newUser => {
-                    return usersRef.doc(newUser.uid).set({ id: newUser.uid, email, firstName });
+                    return usersRef.doc(newUser.uid).set({ id: newUser.uid, email, firstName,...info});
                 });
         });
 
@@ -120,6 +109,18 @@ const createUsersWithId = async (users) => {
         return Promise.reject(error);
     }
 };
+
+exports.createUsersWithId = async (req, res) => {
+    try {
+        const users = req.body.users;
+        const createdUsers = await createUsersWithId([users]);
+        res.status(200).json(createdUsers);
+    } catch (error) {
+        console.error('Error creating users:', error);
+        return res.status(500).json({ error: error.code });
+    }
+};
+
 
 const readExcelFileAndReturnJson = async (filePath, header) => {
   const workbook = XLSX.readFile(filePath);
@@ -173,3 +174,29 @@ exports.createUserIdsWithExcelFile = async (req, res) => {
 
 
 
+// exports.createClasses = async (req, res) => {
+//     let { no_of_classes, no_of_sections } = req.body;
+//     no_of_classes = Number(no_of_classes);
+//     no_of_sections = Number(no_of_sections);
+
+//     try {
+//         //const classesRef = admin.firestore().collection('classes');
+//         //const batch = admin.firestore().batch();
+//         const array = []
+//         const sections = Array.from({ length: no_of_sections }, (v, k) => String.fromCharCode(k + 65));
+//         for (let i = 1; i <= no_of_classes; i++) {
+//            for (let j = 0; j < sections.length; j++)
+//            {
+//             array.push({class:i, section:sections[j]})
+//            }
+//             // const classDocRef = classesRef.doc();
+            
+//             //batch.set(classDocRef, { id: i, sections });
+//         }
+//         //await batch.commit();
+//         res.status(200).json(array);
+//     } catch (error) {
+//         console.error('Error creating classes:', error);
+//         return Promise.reject(error);
+//     }
+// };

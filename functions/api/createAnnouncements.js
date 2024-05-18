@@ -14,7 +14,10 @@ exports.createAnnouncements = async (req, res) => {
 
   const db = admin.firestore();
   db.collection('events').add(announcement)
-    .then(() => res.send('Announcement created successfully'))
+    .then((doc) => {
+      return doc.get()
+    })
+    .then(announcementCreated => res.send(announcementCreated.data()))
     .catch((error) => {
       console.error('Error creating announcement:', error);
       res.status(500).send('Internal server error');
