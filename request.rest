@@ -120,3 +120,13 @@ Content-Type: application/json
     "date": "2024-03-10"
 
 }
+
+#####################
+POST http://127.0.0.1:5001/edge-2060b/us-central1/addHoliday
+Content-Type: application/json
+
+{
+  "schoolId": "poyMxpKXvhHaPNdXpSwx",
+  "date": "2024-05-25",
+  "day": "Sushant Jayanti"
+}

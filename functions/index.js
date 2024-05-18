@@ -11,6 +11,7 @@ const { fetchEvents } = require("./api/common/fetchEvents.js");
 const { uploadFile, getAssignments } = require("./api/common/assignments.js");
 const {createUserIdsWithExcelFile,createClasses,getClasses,getUsersByClassOrSchool,createUsersWithId, getDashboard} = require("./api/admin/admin.js");
 const {createAnnouncements} = require("./api/admin/createAnnouncements.js");
+const { addHoliday } = require("./api/admin/addHoliday.js");
 
 exports.saveAttendance = functions.https.onRequest(saveAttendance);
 exports.saveMarks = functions.https.onRequest(saveMarks);
@@ -29,4 +30,5 @@ exports.createAnnouncements = functions.https.onRequest(createAnnouncements);
 exports.getUsersByClassOrSchool = functions.https.onRequest(getUsersByClassOrSchool);
 exports.createUsersWithId = functions.https.onRequest(createUsersWithId);
 exports.getDashboard = functions.https.onRequest(getDashboard);
+exports.addHoliday = functions.https.onRequest(addHoliday);
 initializeApp();
