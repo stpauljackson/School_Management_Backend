@@ -4,7 +4,7 @@ const moment = require("moment-timezone");
 exports.getCalendar = async (req, res) => {
 	const { School } = req.body;
 	const calendarRef = admin.firestore().collection("calender");
-	const querySnapshot = await calendarRef.where("school", "==", School).get();
+	const querySnapshot = await calendarRef.where("schoolId", "==", School).get();
 	const holidays = [];
 	querySnapshot.forEach((doc) => {
 		holidays.push(doc.data());
@@ -13,8 +13,8 @@ exports.getCalendar = async (req, res) => {
 };
 exports.getAllStudentsfromClass = async (req, res) => {
 	try {
-		const { Type, School, Class, Section, purpose, teacherID } = req.body;
-		if (!Class || !Section || !Type || !School || !purpose || !teacherID) {
+		const { Type, School, Class, purpose, teacherID } = req.body;
+		if (!Class || !Type || !School || !purpose || !teacherID) {
 			return res.status(400).send("Missing required fields");
 		}
 
@@ -47,9 +47,7 @@ exports.getAllStudentsfromClass = async (req, res) => {
 		const usersRef = admin.firestore().collection("users");
 		const querySnapshot = await usersRef
 			.where("type", "==", Type)
-			.where("school", "==", School)
-			.where("class", "==", Class)
-			.where("section", "==", Section)
+			.where("classId", "==", Class)
 			.get();
 
 		const users = [];
