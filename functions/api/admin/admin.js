@@ -3,13 +3,14 @@ const admin = require("firebase-admin");
 const XLSX = require('xlsx');
 
 exports.getDashboard = async (req, res) => {
-    const schoolRef = admin.firestore().collection('Schools').doc(req.body.schoolId);
+    const schoolRef = admin.firestore().collection('schools').doc(req.body.schoolId);
     const schoolDoc = await schoolRef.get();
     if (!schoolDoc.exists) {
         return res.status(400).json({ error: 'School does not exist' });
     }
     const schoolData = schoolDoc.data();
     return res.status(200).json(schoolData);
+
 };
 
 exports.createClasses = async (req, res) => {
@@ -43,7 +44,7 @@ exports.getUsersByClassOrSchool = async (req, res) => {
     try {
         let queryBuilder;
         if (type === 'student') {
-            queryBuilder = admin.firestore().collection('users').where('classId', '==', classId).where('type', '==', type);
+            queryBuilder = admin.firestore().collection('users').where('classId', '==', classId);
         } else {
             queryBuilder = admin.firestore().collection('users').where('schoolId', '==', schoolId).where('type', '==', type);
         }
@@ -109,42 +110,10 @@ const createUsersWithId = async (users) => {
     }
 };
 
-const updateDashboard = async (type, schoolId) => {
-    try {
-      const schoolRef = admin.firestore().collection('Schools').doc(schoolId);
-      const schoolDoc = await schoolRef.get();
-  
-      if (!schoolDoc.exists) {
-        console.error('School does not exist');
-        return;
-      }
-  
-      const schoolData = schoolDoc.data();
-      let updateData = {};
-  
-      if (type === 'student') {
-        updateData = { no_of_students: (schoolData.no_of_students || 0) + 1 };
-      } else if (type === 'teacher') {
-        updateData = { no_of_teachers: (schoolData.no_of_teachers || 0) + 1 };
-      } else if (type === 'employee') {
-        updateData = { no_of_employees: (schoolData.no_of_employees || 0) + 1 };
-      } else {
-        console.error('Invalid type provided');
-        return;
-      }
-  
-      await schoolRef.update(updateData);
-      console.log(`Successfully updated the number of ${type}s for school ${schoolId}`);
-    } catch (error) {
-      console.error('Error updating dashboard:', error);
-    }
-  };
-
 exports.createUsersWithId = async (req, res) => {
     try {
         const users = req.body.users;
         const createdUsers = await createUsersWithId([users]);
-        await updateDashboard(users.type,users.schoolId)
         res.status(200).json(createdUsers);
     } catch (error) {
         console.error('Error creating users:', error);
@@ -198,7 +167,7 @@ exports.createUserIdsWithExcelFile = async (req, res) => {
     });
 
     await createUsersWithId(excelData);
-    await updateDashboard(type,schoolId)
+
     res.status(200).json({message:"Users uploaded successfully"});
   });
 };

@@ -3,11 +3,10 @@ const admin = require('firebase-admin');
 // to fetch the list of classes with 
 exports.getClass = async (req, res) => {
     try {
-        const { uid, schoolId } = req.body;
+        const { uid } = req.body;
         const classRef = admin.firestore().collection('classes');
         const querySnapshot = await classRef
             .where('teacherId', '==', uid)
-            .where('schoolId', '==', schoolId)
             .get();
 
         const classes = [];
