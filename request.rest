@@ -130,3 +130,23 @@ Content-Type: application/json
   "date": "2024-05-25",
   "day": "Sushant Jayanti"
 }
+
+#####################
+POST http://127.0.0.1:5001/edge-2060b/us-central1/student_exam
+Content-Type: application/json
+
+{
+
+ "classId": "oXDtq0AKksvGmiHvqktQ"
+
+}
+##################################
+POST http://127.0.0.1:5001/edge-2060b/us-central1/subject
+Content-Type: application/json
+
+{
+
+  "schoolId": "poyMxpKXvhHaPNdXpSwx",
+  "subjectNames": ["Maths", "English", "Science"]
+
+}

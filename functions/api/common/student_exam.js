@@ -2,9 +2,9 @@ const admin = require('firebase-admin');
 const functions = require("firebase-functions");
 
 exports.student_exam = async (req, res) => {
-    const {classId} = req.body;
+    const classId = req.query.classId;
     const currentDate = new Date();
-    const db = admin.firestore();
+
     if (!classId) {
         return res.status(400).send('Class ID is required');
     }
@@ -12,6 +12,7 @@ exports.student_exam = async (req, res) => {
     try {
         const examinationsRef = db.collection('examinations');
         const snapshot = await examinationsRef.where('classId', '==', classId)
+                                               .where('date', '>=', currentDate)
                                                .get();
 
         if (snapshot.empty) {
@@ -29,5 +30,5 @@ exports.student_exam = async (req, res) => {
     } catch (error) {
         console.error('Error fetching examinations:', error);
         return res.status(500).send('Internal Server Error');
-    }
+    }
 };

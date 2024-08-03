@@ -1,6 +1,5 @@
 const firebase = require("firebase-admin")
 const formidable = require("formidable-serverless");
-const admin = require("firebase-admin");
 
 exports.uploadFile = (req, res) => {
   const form = new formidable.IncomingForm();
@@ -69,26 +68,17 @@ exports.uploadFile = (req, res) => {
 
 exports.getAssignments = async (req, res) => {
     try {
-        const { teacherId, classId, type } = req.body;
-        console.log(req.body);
-        if (!classId || !type) {
-            return res.status(400).send('Bad Request: schoolId, teacherId and classId are required.');
+        const { teacherId, classId } = req.body;
+
+        if (!teacherId || !classId) {
+            return res.status(400).send('Bad Request: teacherId and classId are required.');
         }
 
         const assignmentsRef = admin.firestore().collection('assignments');
-
-        let querySnapshot;
-
-        if (type === 'teacher') {
-            querySnapshot = await assignmentsRef
-                .where('teacherId', '==', teacherId)
-                .where('classId', '==', classId)
-                .get();
-        } else {
-            querySnapshot = await assignmentsRef
-                .where('classId', '==', classId)
-                .get();
-        }
+        const querySnapshot = await assignmentsRef
+            .where('teacherId', '==', teacherId)
+            .where('classId', '==', classId)
+            .get();
 
         const assignments = [];
         querySnapshot.forEach(doc => {
