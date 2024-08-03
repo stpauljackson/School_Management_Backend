@@ -1,4 +1,3 @@
-// TODO : for future use hash of data to check if data is changed 
 const functions = require("firebase-functions");
 const admin = require('firebase-admin');
 const { initializeApp } = require("firebase-admin/app");
@@ -14,8 +13,9 @@ const {createUserIdsWithExcelFile,createClasses,getClasses,getUsersByClassOrScho
 const {createAnnouncements} = require("./api/admin/createAnnouncements.js");
 const { addHoliday } = require("./api/admin/addHoliday.js");
 const { student_exam } = require("./api/common/student_exam.js");
+const { subject } = require("./api/common/subject.js");
 
-admin.initializeApp();
+
 
 exports.saveAttendance = functions.https.onRequest(saveAttendance);
 exports.saveMarks = functions.https.onRequest(saveMarks);
@@ -36,4 +36,6 @@ exports.createUsersWithId = functions.https.onRequest(createUsersWithId);
 exports.getDashboard = functions.https.onRequest(getDashboard);
 exports.addHoliday = functions.https.onRequest(addHoliday);
 exports.student_exam = functions.https.onRequest(student_exam);
+exports.subject = functions.https.onRequest(subject);
 
+admin.initializeApp();
