@@ -13,7 +13,7 @@ exports.createNewExam =  async (req, res) => {
         });
         res.send('Exam created successfully');
     } catch (error) {
-        res.send('Error creating exam:');
+        res.send('Error creating exam');
         console.log(error)
     }
 };
@@ -24,16 +24,13 @@ exports.getExamsByClassId = async (req, res) => {
         if (!classId) {
             return res.status(400).send('Bad Request: classId is required.');
         }
-
-        const examsRef = admin.firestore().collection('exams');
-        const querySnapshot = await examsRef.where('classId', '==', classId).where('date', '>=', new Date()).get();
+        const examsRef = admin.firestore().collection('examinations');
+        const querySnapshot = await examsRef.where('classId', '==', classId).get();
 
         const exams = [];
         querySnapshot.forEach(doc => {
             const examData = doc.data();
-            if (examData.date >= new Date()) {
-                exams.push({id: doc.id, ...examData});
-            }
+            exams.push({id: doc.id, ...examData});
         });
 
         return res.status(200).json(exams);

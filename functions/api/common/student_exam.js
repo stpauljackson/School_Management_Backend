@@ -1,10 +1,10 @@
 const admin = require('firebase-admin');
-const functions = require("firebase-functions");
+
 
 exports.student_exam = async (req, res) => {
-    const classId = req.query.classId;
+    const classId = req.body.classId;
     const currentDate = new Date();
-
+    const db = admin.firestore();
     if (!classId) {
         return res.status(400).send('Class ID is required');
     }

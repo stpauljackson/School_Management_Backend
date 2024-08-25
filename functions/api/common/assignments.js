@@ -1,6 +1,6 @@
 const firebase = require("firebase-admin")
 const formidable = require("formidable-serverless");
-
+const admin = require("firebase-admin");
 exports.uploadFile = (req, res) => {
   const form = new formidable.IncomingForm();
 

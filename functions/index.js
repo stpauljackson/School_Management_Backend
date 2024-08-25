@@ -14,7 +14,8 @@ const {createAnnouncements} = require("./api/admin/createAnnouncements.js");
 const { addHoliday } = require("./api/admin/addHoliday.js");
 const { student_exam } = require("./api/common/student_exam.js");
 const { subject } = require("./api/common/subject.js");
-
+const { getExamsByClassId, createNewExam } = require("./api/common/examination.js");
+const { uploadImage, getImages} = require("./api/admin/FileUpload.js");
 
 
 exports.saveAttendance = functions.https.onRequest(saveAttendance);
@@ -35,7 +36,10 @@ exports.getUsersByClassOrSchool = functions.https.onRequest(getUsersByClassOrSch
 exports.createUsersWithId = functions.https.onRequest(createUsersWithId);
 exports.getDashboard = functions.https.onRequest(getDashboard);
 exports.addHoliday = functions.https.onRequest(addHoliday);
+exports.getExamsByClassId = functions.https.onRequest(getExamsByClassId);
 exports.student_exam = functions.https.onRequest(student_exam);
 exports.subject = functions.https.onRequest(subject);
-
+exports.createNewExam = functions.https.onRequest(createNewExam);
+exports.uploadImage = functions.https.onRequest(uploadImage);
+exports.getImages = functions.https.onRequest(getImages);
 admin.initializeApp();
