@@ -37,21 +37,34 @@ exports.uploadImage = (req, res) => {
 
     try {
       const imageDocRef = firebase.firestore().collection("images").doc();
-
+      
       const uploadResponse = await firebase.storage().bucket("edge-2060b").upload(imagePath, {
         metadata: {
           contentType: image.type,
         },
       });
 
-      await imageDocRef.set({
+      const imageDoc = await firebase.firestore().collection("images").where("classId", "==", classId).where("schoolId", "==", schoolId).limit(1).get();
+      if (imageDoc.empty) {
+        await imageDocRef.set({
+          classId,
+          schoolId,
+          url: uploadResponse[0].metadata.mediaLink,
+          timestamp: Date.now(),
+        });
+      } else {
+        await imageDoc.docs[0].ref.update({
+          url: uploadResponse[0].metadata.mediaLink,
+          timestamp: Date.now(),
+        });
+      }
+      res.status(200).json({
+        imageDocId: imageDocRef.id,
+        url: uploadResponse[0].metadata.mediaLink,
         classId,
         schoolId,
-        url: uploadResponse[0].metadata.mediaLink,
         timestamp: Date.now(),
       });
-
-      res.status(200).json({ imageDocId: imageDocRef.id });
     } catch (err) {
       console.error("Error while uploading image: " + err);
       res.status(500).json({ error: err });
