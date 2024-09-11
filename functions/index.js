@@ -7,7 +7,7 @@ const { getAllStudentsfromClass, getCalendar } = require("./api/common/teacher.j
 const { saveMarks } = require("./api/teacher/savemarks.js");
 const { getClass } = require("./api/common/getclass.js");
 const { getAllTests, createNewTest } = require("./api/teacher/getAllTests.js");
-const { fetchEvents } = require("./api/common/fetchEvents.js");
+const { fetchEvents,deleteEventById } = require("./api/common/fetchEvents.js");
 const { uploadFile, getAssignments } = require("./api/common/assignments.js");
 const {createUserIdsWithExcelFile,createClasses,getClasses,getUsersByClassOrSchool,createUsersWithId, getDashboard} = require("./api/admin/admin.js");
 const {createAnnouncements} = require("./api/admin/createAnnouncements.js");
@@ -42,4 +42,5 @@ exports.subject = functions.https.onRequest(subject);
 exports.createNewExam = functions.https.onRequest(createNewExam);
 exports.uploadImage = functions.https.onRequest(uploadImage);
 exports.getImages = functions.https.onRequest(getImages);
+exports.deleteEventById = functions.https.onRequest(deleteEventById);
 admin.initializeApp();
