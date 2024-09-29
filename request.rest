@@ -150,3 +150,15 @@ Content-Type: application/json
   "subjectNames": ["Maths", "English", "Science"]
 
 }
+
+#########################################
+POST http://127.0.0.1:5001/edge-2060b/us-central1/updateUserDetails
+Content-Type: application/json
+
+{
+  "DocumentID": "056B52wCUHgmw2uAJ55S6p7FXLI3",
+  "firstName": "John",
+  "lastName": "Doe",
+  "fatherMobileNumber": "1234567890",
+  "aadhaarCardNumber": "1234-5678-9101"
+}

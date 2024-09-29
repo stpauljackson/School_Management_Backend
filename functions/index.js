@@ -17,7 +17,7 @@ const { subject } = require("./api/common/subject.js");
 const { getExamsByClassId, createNewExam } = require("./api/common/examination.js");
 const { uploadImage, getImages} = require("./api/admin/FileUpload.js");
 const { getQuizzesByClassTeacherSubject } = require("./api/common/Quiz.js");
-
+const { updateUserDetails } = require("./api/admin/edit.js");
 
 exports.saveAttendance = functions.https.onRequest(saveAttendance);
 exports.saveMarks = functions.https.onRequest(saveMarks);
@@ -45,4 +45,5 @@ exports.uploadImage = functions.https.onRequest(uploadImage);
 exports.getImages = functions.https.onRequest(getImages);
 exports.deleteEventById = functions.https.onRequest(deleteEventById);
 exports.getQuizzesByClassTeacherSubject = functions.https.onRequest(getQuizzesByClassTeacherSubject);
+exports.updateUserDetails = functions.https.onRequest(updateUserDetails);
 admin.initializeApp();
