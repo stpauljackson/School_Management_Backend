@@ -2,9 +2,9 @@ const admin = require('firebase-admin');
 
 exports.createNewQuiz = async (req, res) => {
     try {
-        const { quizName, classId, subject, teacherId, teacherName, time, questions, date } = req.body;
+        const { quizName, classId, subject, teacherId, time, questions, date } = req.body;
 
-        if (!quizName || !classId || !subject || !teacherId || !teacherName || !time || !questions || !date) {
+        if (!quizName || !classId || !subject || !teacherId || !time || !questions || !date) {
             return res.status(400).send('Bad Request: quizName, classId and questions are required.');
         }
 
@@ -12,9 +12,8 @@ exports.createNewQuiz = async (req, res) => {
         const newQuizRef = await quizzesRef.add({
             quizName,
             classId,
-            subject,
+            subjectId: subject,
             teacherId,
-            teacherName,
             time,
             questions,
             studentAttempts:[],
@@ -27,11 +26,32 @@ exports.createNewQuiz = async (req, res) => {
     }
 };
 
-const admin = require('firebase-admin');
+exports.updateQuizStudentAttempts = async (req, res) => {
+    try {
+        const { quizId, userId, selectedOptions, name,correctAnswers,percentage } = req.body;
+
+        if (!quizId || !userId || !selectedOptions || !name,!correctAnswers || !percentage) {
+            return res.status(400).send('Bad Request: quizId, userId, marks and name are required.');
+        }
+
+        const quizzesRef = admin.firestore().collection('Quizzes');
+        const quizRef = quizzesRef.doc(quizId);
+        const quizDoc = await quizRef.get();
+        const studentAttempts = quizDoc.data().studentAttempts || [];
+        studentAttempts.push({ userId, selectedOptions, name ,correctAnswers,percentage });
+        await quizRef.update({
+            studentAttempts
+        });
+        return res.status(200).json(`Quiz student attempts updated successfully. Document ID: ${quizId}`);
+    } catch (error) {
+        console.error('Error updating quiz student attempts:', error);
+        return res.status(500).send('Internal server error.');
+    }
+};
 
 exports.getQuizzesByClassTeacherSubject = async (req, res) => {
     try {
-        const { classId, teacherId, subject, type } = req.query;
+        const { classId, teacherId, subject, type } = req.body;
 
         if (!classId || !type) {
             return res.status(400).send('Bad Request: classId and type are required.');
@@ -43,7 +63,7 @@ exports.getQuizzesByClassTeacherSubject = async (req, res) => {
         if (type === 'teacher') {
             query = query.where('classId', '==', classId)
                 .where('teacherId', '==', teacherId)
-                .where('subject', '==', subject);
+                .where('subjectId', '==', subject);
         } else if (type === 'student') {
             query = query.where('classId', '==', classId);
         } else {

@@ -62,6 +62,23 @@ exports.getUsersByClassOrSchool = async (req, res) => {
         return res.status(500).json({ error: error.code });
     }
 }
+exports.assignClassToTeacher = async (req, res) => {
+    const { teacherId, classId, classDetails } = req.body;
+    try {
+        const teacherRef = admin.firestore().collection('users').doc(teacherId);
+        const classRef = admin.firestore().collection('classes').doc(classId);
+        const batch = admin.firestore().batch();
+        const currentClasses = (await teacherRef.get()).data().classes || [];
+        currentClasses.push({ class: classDetails.class, classId: classId, section: classDetails.section, subject: classDetails.subject, subjectId: classDetails.subjectId });
+        batch.set(teacherRef, { classes: currentClasses });
+        batch.set(classRef, { teacherId });
+        await batch.commit();
+        res.status(200).json({ message: 'Class assigned successfully' });
+    } catch (error) {
+        console.error('Error assigning class:', error);
+        return res.status(500).json({ error: error.code });
+    }
+}
 
 exports.getClasses = async (req, res) => {
     const { schoolId } = req.body;

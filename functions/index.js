@@ -1,6 +1,5 @@
 const functions = require("firebase-functions");
 const admin = require('firebase-admin');
-const { initializeApp } = require("firebase-admin/app");
 
 const { saveAttendance } = require("./api/teacher/attendance.js");
 const { getAllStudentsfromClass, getCalendar } = require("./api/common/teacher.js");
@@ -16,7 +15,7 @@ const { student_exam } = require("./api/common/student_exam.js");
 const { subject } = require("./api/common/subject.js");
 const { getExamsByClassId, createNewExam } = require("./api/common/examination.js");
 const { uploadImage, getImages} = require("./api/admin/FileUpload.js");
-const { getQuizzesByClassTeacherSubject } = require("./api/common/Quiz.js");
+const { getQuizzesByClassTeacherSubject, createNewQuiz, updateQuizStudentAttempts } = require("./api/common/Quiz.js");
 const { updateUserDetails } = require("./api/admin/edit.js");
 
 exports.saveAttendance = functions.https.onRequest(saveAttendance);
@@ -45,5 +44,7 @@ exports.uploadImage = functions.https.onRequest(uploadImage);
 exports.getImages = functions.https.onRequest(getImages);
 exports.deleteEventById = functions.https.onRequest(deleteEventById);
 exports.getQuizzesByClassTeacherSubject = functions.https.onRequest(getQuizzesByClassTeacherSubject);
+exports.createNewQuiz = functions.https.onRequest(createNewQuiz);
 exports.updateUserDetails = functions.https.onRequest(updateUserDetails);
+exports.updateQuizStudentAttempts = functions.https.onRequest(updateQuizStudentAttempts);
 admin.initializeApp();
